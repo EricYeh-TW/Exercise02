@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import Navigation from "./components/Navigation/Navigation.js";
+import Signin from "./components/Signin/Signin.js";
+import Register from "./components/Register/Register.js";
 import FaceRecognition from "./components/FaceRecognition/FaceRecognition.js";
 import Logo from "./components/Logo/Logo.js";
 import ImageLinkForm from "./components/ImageLinkForm/ImageLinkForm.js";
@@ -15,10 +17,13 @@ const app = new Clarifai.App({
 class App extends Component {
   constructor() {
     super();
+    this.wrapper = React.createRef();
     this.state = {
       input: '',
       imageUrl: '',
-      box: {}
+      box: {},
+      route: 'signIn',
+      isSignIn: false
     }
   }
 
@@ -51,17 +56,31 @@ class App extends Component {
       .catch(err => console.log(err));
   }
 
+  onRouteChange = (route) => {
+    if (route === 'signOut') {
+      this.setState({isSignIn: false})
+    } else if (route === 'home') {
+      this.setState({isSignIn: true})
+    }
+    this.setState({route: route});
+  }
+  
   render() {
+    const { isSignIn, imageUrl, route, box } = this.state;
     return (
-      <div className="App">
-        <Navigation />
-        <Logo />
-        <Rank />
-        <ImageLinkForm 
-          onInputChange = {this.onInputChange}
-          onButtonClick = {this.onButtonClick}
-        />
-        <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl} />
+      <div className="App" >
+        <Navigation isSignIn={isSignIn} onRouteChange={this.onRouteChange}/>
+      { route === 'home'
+        ? <>
+            <Logo />
+            <Rank />
+            <ImageLinkForm onInputChange = {this.onInputChange} onButtonClick = {this.onButtonClick} />
+            <FaceRecognition box={box} imageUrl={imageUrl} />
+          </> 
+        : this.state.route === 'register'
+        ?   <Register onRouteChange={this.onRouteChange} />
+        :   <Signin onRouteChange={this.onRouteChange} />
+      }
       </div>
     );
   }
