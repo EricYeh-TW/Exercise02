@@ -27,6 +27,8 @@ class App extends Component {
     }
   }
 
+  
+
   faceLocation = (obj) => {
     const boxPosition = obj.outputs[0].data.regions[0].region_info.bounding_box;
     const pic = document.getElementById('inputPic');
