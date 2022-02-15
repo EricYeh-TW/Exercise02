@@ -17,7 +17,6 @@ const app = new Clarifai.App({
 class App extends Component {
   constructor() {
     super();
-    this.wrapper = React.createRef();
     this.state = {
       input: '',
       imageUrl: '',
@@ -28,7 +27,7 @@ class App extends Component {
         id: "",
         name: "",
         email: "",
-        entries: "0",
+        entries: 0,
         joined: '',
       }
     }
@@ -90,13 +89,13 @@ class App extends Component {
       { route === 'home'
         ? <>
             <Logo />
-            <Rank />
+            <Rank name={this.state.user.name} entries={this.state.user.entries} />
             <ImageLinkForm onInputChange = {this.onInputChange} onButtonClick = {this.onButtonClick} />
             <FaceRecognition box={box} imageUrl={imageUrl} />
           </> 
         : this.state.route === 'register'
         ?   <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
-        :   <Signin onRouteChange={this.onRouteChange} />
+        :   <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
       }
       </div>
     );
