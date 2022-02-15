@@ -23,11 +23,26 @@ class App extends Component {
       imageUrl: '',
       box: {},
       route: 'signIn',
-      isSignIn: false
+      isSignIn: false,
+      user: {
+        id: "",
+        name: "",
+        email: "",
+        entries: "0",
+        joined: '',
+      }
     }
   }
 
-  
+  loadUser = (data) => {
+    this.setState({user:{
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      entries: data.entries,
+      joined: data.joined,
+    }})
+  }
 
   faceLocation = (obj) => {
     const boxPosition = obj.outputs[0].data.regions[0].region_info.bounding_box;
@@ -80,7 +95,7 @@ class App extends Component {
             <FaceRecognition box={box} imageUrl={imageUrl} />
           </> 
         : this.state.route === 'register'
-        ?   <Register onRouteChange={this.onRouteChange} />
+        ?   <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
         :   <Signin onRouteChange={this.onRouteChange} />
       }
       </div>
